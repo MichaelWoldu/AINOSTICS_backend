@@ -64,6 +64,7 @@ def create():
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        keyword = request.form["keyword"]
         error = None
 
         if not title:
@@ -74,8 +75,8 @@ def create():
         else:
             db = get_db()
             db.execute(
-                "INSERT INTO post (title, body, author_id) VALUES (?, ?, ?)",
-                (title, body, g.user["id"]),
+                "INSERT INTO post (title, body, author_id, keyword) VALUES (?, ?, ?, ?)",
+                (title, body, g.user["id"], keyword),
             )
             db.commit()
             return redirect(url_for("blog.index"))
@@ -92,6 +93,7 @@ def update(id):
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        keyword = request.form["keyword"]
         error = None
 
         if not title:
@@ -102,7 +104,7 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, id)
+                "UPDATE post SET title = ?, body = ?, keyword = ? WHERE id = ?", (title, body, keyword, id)
             )
             db.commit()
             return redirect(url_for("blog.index"))
